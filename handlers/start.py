@@ -3,7 +3,7 @@ from keyboards.inline.inline import start_keyboard
 from aiogram.dispatcher.filters import Command
 from loader import dp
 
-@dp.message_handler(Command('start'))
+@dp.message_handler(Command('start'), state="*")
 async def start(message: types.Message):
     await message.answer(
         "Ассалому алайкум!\nУшбу бот орқали сизга Тошкент "
