@@ -105,7 +105,7 @@ async def send_parkent_location(call: types.CallbackQuery, state: FSMContext):
 
     menu_msg = await bot.send_message(
         chat_id=call.message.chat.id,
-        text="📍 *Жойлашув*",
+        text="📍 *Parkent village joylashuvi*",
         parse_mode="Markdown",
         reply_markup=parkent_main_keyboard()
     )
