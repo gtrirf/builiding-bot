@@ -21,8 +21,9 @@ async def lakeside_residence_main(call: types.CallbackQuery, state: FSMContext):
     """Lakeside Residence haqida ma'lumot beruvchi asosiy menyu."""
     await bot.send_message(
         chat_id=call.message.chat.id,
-        text="турар жой мажмуаси Тошкент вилояти, Паркент тумани «Истиқбол» МФЙ Алишер Навоий кўчаси "
-        "48-уй ҳудудида жойлашган бўлиб, ушбу мажмуада 7 қаватли турар уй-жой бинолари мавжуд.",
+        text="*Lakeside Residence - турар жой мажмуаси Тошкент вилояти, Паркент тумани «Истиқбол» МФЙ Алишер Навоий "
+             "кўчаси 48-уй ҳудудида жойлашган бўлиб, ушбу мажмуада 7 қаватли турар уй-жой бинолари мавжуд.*",
+        parse_mode="Markdown",
         reply_markup=lakeside_main_keyboard(),
     )
     await Form.LAKESIDE_MAIN.set()
@@ -31,9 +32,9 @@ async def lakeside_residence_main(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(lambda c: c.data == "lakeside_residence_under_construction", state=Form.LAKESIDE_MAIN)
 async def lakeside_residence_buy(call: types.CallbackQuery, state: FSMContext):
     """Sotib olish uchun menyu."""
-    await bot.send_message(
-        chat_id=call.message.chat.id,
-        text="Сотиб олиш учун",
+    await call.message.edit_text(
+        text="*Сотиб олиш учун*",
+        parse_mode="Markdown",
         reply_markup=lakeside_purchase_options()
     )
     await Form.LAKESIDE_READY.set()
@@ -42,9 +43,9 @@ async def lakeside_residence_buy(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(lambda c: c.data == "full_payment_lakeside", state=Form.LAKESIDE_READY)
 async def lakeside_residence_full_payment(call: types.CallbackQuery, state: FSMContext):
     """100% to'lov asosida sotib olish."""
-    await bot.send_message(
-        chat_id=call.message.chat.id,
-        text='100%лик тўлов асосида сотиб олиш',
+    await call.message.edit_text(
+        text='*100%лик тўлов асосида сотиб олиш*',
+        parse_mode="Markdown",
         reply_markup=full_payment_options()
     )
     await Form.LAKESIDE_100PERSENT.set()
@@ -53,9 +54,9 @@ async def lakeside_residence_full_payment(call: types.CallbackQuery, state: FSMC
 @dp.callback_query_handler(lambda c: c.data == "discount_payment_lakeside", state=Form.LAKESIDE_READY)
 async def lakeside_residence_discount(call: types.CallbackQuery, state: FSMContext):
     """5% chegirma asosida sotib olish."""
-    await bot.send_message(
-        chat_id=call.message.chat.id,
-        text="5%лик чегирма асосида сотиб олиш",
+    await call.message.edit_text(
+        text="*5%лик чегирма асосида сотиб олиш:*",
+        parse_mode="Markdown",
         reply_markup=discount_payment_options()
     )
     await Form.LAKESIDE_5PERSENT.set()
@@ -64,9 +65,9 @@ async def lakeside_residence_discount(call: types.CallbackQuery, state: FSMConte
 @dp.callback_query_handler(lambda c: c.data == "credit_payment_lakeside", state=Form.LAKESIDE_READY)
 async def lakeside_residence_credit(call: types.CallbackQuery, state: FSMContext):
     """Kredit asosida sotib olish."""
-    await bot.send_message(
-        chat_id=call.message.chat.id,
-        text='Кредит асосида сотиб олиш',
+    await call.message.edit_text(
+        text='*Кредит асосида сотиб олиш:*',
+        parse_mode="Markdown",
         reply_markup=credit_payment_options()
     )
     await Form.LAKESIDE_CREDIT.set()
@@ -93,7 +94,7 @@ async def send_lakeside_gallery(call: types.CallbackQuery, state: FSMContext):
 
         menu_msg = await bot.send_message(
             chat_id=call.message.chat.id,
-            text="📸 *Lakeside Foto Galereya* 🏡",
+            text="📸 *Фото лавхалар* 🏡",
             parse_mode="Markdown",
             reply_markup=lakeside_main_keyboard()
         )
@@ -119,20 +120,20 @@ async def send_lakeside_location(call: types.CallbackQuery, state: FSMContext):
 
     await bot.send_message(
         chat_id=call.message.chat.id,
-        text="📍 *Lakeside Residence Joylashuvi*",
+        text="📍 *Жойлашув*",
         parse_mode="Markdown",
         reply_markup=lakeside_main_keyboard()
     )
 
 
 # 100% to'lov asosida xonalar uchun handlerlar
-@dp.callback_query_handler(lambda c: c.data.startswith("full_payment_"), state=Form.LAKESIDE_100PERSENT)
+@dp.callback_query_handler(lambda c: c.data.startswith("full_payment"), state=Form.LAKESIDE_READY)
 async def lakeside_full_payment_rooms(call: types.CallbackQuery, state: FSMContext):
 
     try:
         await bot.send_message(
             chat_id=call.message.chat.id,
-            caption=f"🏠 *100%лик тўлов асосида сотиб олиш*",
+            text=f"🏠 *100%лик тўлов асосида сотиб олиш*",
             parse_mode="Markdown",
             reply_markup=full_payment_options(),
         )
@@ -163,40 +164,53 @@ data = {
 }
 
 IMAGE_NOT_FOUND_MSG = "❌ Tanlangan rasm mavjud emas: {}"
-IMAGE_SEND_ERROR_MSG = "❌ Rasm yuborishda xatolik yuz berdi."
+IMAGE_SEND_ERROR_MSG = "Siz allaqachon shu rasmni ko'rmoqdasiz"
 NO_IMAGE_FOUND_MSG = "❌ Ushbu tanlov uchun rasm topilmadi."
 
-@dp.callback_query_handler(lambda c: c.data in data, state=Form.LAKESIDE_PHOTO)
-async def send_image(callback_query: types.CallbackQuery, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data in data, state="*")
+async def send_image(callback_query: types.CallbackQuery, state:FSMContext):
+    print(f"Received callback_data: {callback_query.data}")
     import os
     import logging
-
-    current_state = await state.get_state()
-    logger.info(f"Foydalanuvchi hozirgi state: {current_state}")
 
     image_path = data.get(callback_query.data)
 
     if not image_path:
         logger.error(f"Ushbu callback_data bo'yicha rasm topilmadi: {callback_query.data}")
-        await callback_query.message.answer(NO_IMAGE_FOUND_MSG)
-        await callback_query.answer()
+        # print(NO_IMAGE_FOUND_MSG)
         return
-
 
     if not os.path.exists(image_path):
         logger.error(f"Rasm topilmadi: {image_path}")
-        await callback_query.message.answer(IMAGE_NOT_FOUND_MSG.format(callback_query.data))
-        await callback_query.answer()
+        # print(IMAGE_NOT_FOUND_MSG.format(callback_query.data))
         return
 
     try:
-        photo = InputFile(image_path)
-        await bot.send_photo(chat_id=callback_query.message.chat.id, photo=photo, caption="Bu siz tanlagan variant.")
+        markup = callback_query.message.reply_markup
+
+        old_photo = callback_query.message.photo[-1].file_id if callback_query.message.photo else None
+
+        if old_photo:
+
+            new_photo = types.InputMediaPhoto(media=types.InputFile(image_path))
+            await callback_query.message.edit_media(new_photo, reply_markup=markup)
+
+        else:
+            # 🎯 Yangi rasm yuborish
+            await bot.send_photo(
+                chat_id=callback_query.message.chat.id,
+                photo=types.InputFile(image_path),
+                reply_markup=markup
+            )
+            await callback_query.message.delete()  # Eski xabarni o‘chiramiz
+
     except Exception as e:
         logger.error(f"Rasm yuborishda xatolik: {str(e)}")
         await callback_query.message.answer(IMAGE_SEND_ERROR_MSG)
     finally:
         await callback_query.answer()
+
+
 
 
 # def send_photo(update: Update, context: CallbackContext) -> None:

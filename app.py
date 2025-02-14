@@ -8,7 +8,6 @@ from utils.set_bot_commands import set_default_commands
 async def on_startup(dispatcher):
     """Bot ishga tushganda bajariladigan amallar."""
     logging.info("Bot ishga tushmoqda...")
-
     # Bot buyruqlarini o‘rnatish
     await set_default_commands(dispatcher)
 

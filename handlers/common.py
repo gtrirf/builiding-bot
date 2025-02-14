@@ -30,10 +30,13 @@ async def back_to_main_menu(call: types.CallbackQuery, state: FSMContext):
     await state.update_data(gallery_messages=[])  # Saqlangan xabarlarni tozalash
 
     # Bosh menyu xabarini yuborish
-    await bot.send_message(chat_id=call.message.chat.id, text="Ушбу бот орқали сизга Тошкент "
+    await bot.send_message(
+        chat_id=call.message.chat.id,
+        text="*Ушбу бот орқали сизга Тошкент "
         "вилоятининг Паркент туманидаги турар жой мажмуалари "
-        "тўғрисида маълумот берилади.", reply_markup=start_keyboard())
-
+        "тўғрисида маълумот берилади.*",
+        parse_mode="Markdown",
+        reply_markup=start_keyboard())
 
 
 # @dp.callback_query_handler(lambda c: c.data == 'back', state="*")

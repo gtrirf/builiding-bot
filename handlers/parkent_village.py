@@ -19,9 +19,9 @@ async def parkent_main(call: types.CallbackQuery, state: FSMContext):
     """Parkent Village haqida ma'lumot beruvchi asosiy menyu."""
     await bot.send_message(
         chat_id=call.message.chat.id,
-        text="Parkent Village - турар жой мажмуаси Тошкент вилояти Паркент тумани "
+        text="*Parkent Village - турар жой мажмуаси Тошкент вилояти Паркент тумани "
         "«Сой» МФЙ Тамбалак кўчаси ҳудудида жойлашган бўлиб, ушбу мажмуада "
-        "5 қаватли турар уй-жой бинолари мавжуд.",
+        "5 қаватли турар уй-жой бинолари мавжуд.*",
         reply_markup=parkent_main_keyboard(),
         parse_mode="Markdown"
     )
@@ -31,16 +31,20 @@ async def parkent_main(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(lambda c: c.data == "parkent_village_ready", state=Form.PARKENT_MAIN)
 async def parkent_ready(call: types.CallbackQuery, state: FSMContext):
     """Tayyor uylar haqida ma'lumot beruvchi menyu."""
-    await call.message.edit_text(
-        "Тайёр кадастрли хонадонлар",
+    await bot.send_message(
+        chat_id=call.message.chat.id,
+        text="*Тайёр кадастрли хонадонлар:*",
+        parse_mode="Markdown",
         reply_markup=parkent_ready_keyboard()
     )
     await Form.PARKENT_READY.set()
 
 @dp.callback_query_handler(lambda c: c.data == "parkent_village_under_construction", state=Form.PARKENT_MAIN)
 async def parkent_under_construction(call: types.CallbackQuery, state: FSMContext):
-    await call.message.edit_text(
-        "Битказилаётган хонадонлар ҳақида маълумот:",
+    await bot.send_message(
+        chat_id=call.message.chat.id,
+        text="*Битказилаётган хонадонлар ҳақида маълумот:*",
+        parse_mode="Markdown",
         reply_markup=parkent_under_construction_keyboard()
     )
     await Form.PARKENT_UNDER_CONSTRUCTION.set()
@@ -72,7 +76,7 @@ async def send_parkent_gallery(call: types.CallbackQuery, state: FSMContext):
         # Inline tugmalar bilan rasmni qo'shib matn yuborish
         menu_msg = await bot.send_message(
             chat_id=call.message.chat.id,
-            text="📸 *Parkent Village Foto Galereya* 🏡",
+            text="📸 *Фото лавхалар* 🏡",
             parse_mode="Markdown",
             reply_markup=parkent_main_keyboard()
         )
@@ -101,7 +105,7 @@ async def send_parkent_location(call: types.CallbackQuery, state: FSMContext):
 
     menu_msg = await bot.send_message(
         chat_id=call.message.chat.id,
-        text="📍 *Parkent Village Joylashuvi*",
+        text="📍 *Жойлашув*",
         parse_mode="Markdown",
         reply_markup=parkent_main_keyboard()
     )
@@ -118,8 +122,7 @@ async def subsidya_ready_info(call: types.CallbackQuery):
     await call.answer()
 
     message_text = "*Субсидия асосида сотиб олиш*"
-    await bot.send_message(
-        chat_id=call.message.chat.id,
+    await call.message.edit_text(
         text=message_text,
         parse_mode="Markdown",
         reply_markup=subsidya_ready_keyboard()
@@ -133,8 +136,7 @@ async def full_payment_ready_info(call: types.CallbackQuery):
 
     message_text = "*100% тўлов асосида сотиб олиш*"
 
-    await bot.send_message(
-        chat_id=call.message.chat.id,
+    await call.message.edit_text(
         text=message_text,
         parse_mode="Markdown",
         reply_markup=subsidya_ready_keyboard()
@@ -224,8 +226,6 @@ async def subsidya_3_rooms(call: types.CallbackQuery):
             pass
 
 
-
-
 @dp.callback_query_handler(lambda c: c.data == "full_payment_2_rooms_ready", state=Form.PARKENT_READY)
 async def full_payment_2_rooms(call: types.CallbackQuery):
     """2 хонали хонадон (100% тўлов) rasmni yuborish yoki yangilash."""
@@ -243,7 +243,7 @@ async def full_payment_3_rooms(call: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == "subsidya_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
 async def subsidya_under_construction(call: types.CallbackQuery):
     await call.message.edit_text(
-        "Бошлангич тўлов асосида сотиб олиш учун хонадонлар:",
+        "*Бошлангич тўлов асосида сотиб олиш учун хонадонлар:*",
         reply_markup=subsidya_under_construction_keyboard()
     )
 

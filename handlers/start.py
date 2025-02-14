@@ -6,8 +6,9 @@ from loader import dp
 @dp.message_handler(Command('start'), state="*")
 async def start(message: types.Message):
     await message.answer(
-        "Ассалому алайкум!\nУшбу бот орқали сизга Тошкент "
+        "*Ассалому алайкум!\nУшбу бот орқали сизга Тошкент "
         "вилоятининг Паркент туманидаги турар жой мажмуалари "
-        "тўғрисида маълумот берилади.",
+        "тўғрисида маълумот берилади.*",
+        parse_mode="Markdown",
         reply_markup=start_keyboard()
     )
