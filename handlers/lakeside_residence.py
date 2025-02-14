@@ -33,7 +33,7 @@ async def lakeside_residence_main(call: types.CallbackQuery, state: FSMContext):
 async def lakeside_residence_buy(call: types.CallbackQuery, state: FSMContext):
     """Sotib olish uchun menyu."""
     await call.message.edit_text(
-        text="*Сотиб олиш учун*",
+        text="*Сотиб олиш учун:*",
         parse_mode="Markdown",
         reply_markup=lakeside_purchase_options()
     )
@@ -44,7 +44,7 @@ async def lakeside_residence_buy(call: types.CallbackQuery, state: FSMContext):
 async def lakeside_residence_full_payment(call: types.CallbackQuery, state: FSMContext):
     """100% to'lov asosida sotib olish."""
     await call.message.edit_text(
-        text='*100%лик тўлов асосида сотиб олиш*',
+        text='*100%лик тўлов асосида сотиб олиш:*',
         parse_mode="Markdown",
         reply_markup=full_payment_options()
     )
@@ -133,7 +133,7 @@ async def lakeside_full_payment_rooms(call: types.CallbackQuery, state: FSMConte
     try:
         await bot.send_message(
             chat_id=call.message.chat.id,
-            text=f"🏠 *100%лик тўлов асосида сотиб олиш*",
+            text=f"🏠 *100%лик тўлов асосида сотиб олиш:*",
             parse_mode="Markdown",
             reply_markup=full_payment_options(),
         )

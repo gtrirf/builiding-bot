@@ -121,7 +121,7 @@ async def subsidya_ready_info(call: types.CallbackQuery):
     logging.info("subsidya_ready tugmasi bosildi")
     await call.answer()
 
-    message_text = "*Субсидия асосида сотиб олиш*"
+    message_text = "*Субсидия асосида сотиб олиш:*"
     await call.message.edit_text(
         text=message_text,
         parse_mode="Markdown",
@@ -134,7 +134,7 @@ async def full_payment_ready_info(call: types.CallbackQuery):
     """100%лик тўлов асосида сотиб олиш tugmasi bosilganda ishlaydi."""
     await call.answer()
 
-    message_text = "*100% тўлов асосида сотиб олиш*"
+    message_text = "*100% тўлов асосида сотиб олиш:*"
 
     await call.message.edit_text(
         text=message_text,
@@ -244,6 +244,7 @@ async def full_payment_3_rooms(call: types.CallbackQuery):
 async def subsidya_under_construction(call: types.CallbackQuery):
     await call.message.edit_text(
         "*Бошлангич тўлов асосида сотиб олиш учун хонадонлар:*",
+        parse_mode="Markdown",
         reply_markup=subsidya_under_construction_keyboard()
     )
 
@@ -251,7 +252,8 @@ async def subsidya_under_construction(call: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == "full_payment_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
 async def full_payment_under_construction(call: types.CallbackQuery):
     await call.message.edit_text(
-        "100% тўлов асосида сотиб олиш учун хонадонлар:",
+        "*100% тўлов асосида сотиб олиш учун хонадонлар:*",
+        parse_mode="Markdown",
         reply_markup=full_payment_under_construction_keyboard()
     )
 
@@ -274,7 +276,9 @@ async def subsidya_3_rooms_under_construction(call: types.CallbackQuery):
 async def full_payment_2_rooms_under_construction(call: types.CallbackQuery):
     """2 хонали хонадон (100% тўлов асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
-    await update_photo(call, "images/2xona100bitayotgan.jpg", "💰 *2 хонали хонадон (100% тўлов асосида)*", full_payment_under_construction_keyboard())
+    await update_photo(call, "images/2xona100bitayotgan.jpg",
+                       "💰 *2 хонали хонадон (100% тўлов асосида)*",
+                       full_payment_under_construction_keyboard())
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_3_rooms_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
