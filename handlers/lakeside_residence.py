@@ -110,7 +110,7 @@ async def send_lakeside_location(call: types.CallbackQuery, state: FSMContext):
     """Lakeside joylashuvi."""
     await call.answer()
 
-    location = {'latitude': 41.312336, 'longitude': 69.278707}  # Lakeside koordinatalari
+    location = {'latitude': 41.302778, 'longitude': 69.637750}  # Lakeside koordinatalari
 
     await bot.send_location(
         chat_id=call.message.chat.id,
