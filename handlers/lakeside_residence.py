@@ -120,7 +120,7 @@ async def send_lakeside_location(call: types.CallbackQuery, state: FSMContext):
 
     await bot.send_message(
         chat_id=call.message.chat.id,
-        text="📍 *Lakeside residence joylashuvi*",
+        text="📍 *Lakeside residence - жойлашуви*",
         parse_mode="Markdown",
         reply_markup=lakeside_main_keyboard()
     )
