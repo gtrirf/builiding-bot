@@ -10,8 +10,8 @@ from keyboards.inline.inline import (
     parkent_under_construction_keyboard, subsidya_under_construction_keyboard, full_payment_under_construction_keyboard,
 )
 from states.states import Form
-# from .common import save_last_state
 from aiogram.types import InputFile
+
 
 
 @dp.callback_query_handler(lambda c: c.data == "parkent_village", state="*")
@@ -28,7 +28,7 @@ async def parkent_main(call: types.CallbackQuery, state: FSMContext):
     await state.set_state(Form.PARKENT_MAIN.state)
 
 
-@dp.callback_query_handler(lambda c: c.data == "parkent_village_ready", state=Form.PARKENT_MAIN)
+@dp.callback_query_handler(lambda c: c.data == "parkent_village_ready", state="*")
 async def parkent_ready(call: types.CallbackQuery, state: FSMContext):
     """Tayyor uylar haqida ma'lumot beruvchi menyu."""
     await bot.send_message(
@@ -39,7 +39,7 @@ async def parkent_ready(call: types.CallbackQuery, state: FSMContext):
     )
     await Form.PARKENT_READY.set()
 
-@dp.callback_query_handler(lambda c: c.data == "parkent_village_under_construction", state=Form.PARKENT_MAIN)
+@dp.callback_query_handler(lambda c: c.data == "parkent_village_under_construction", state="*")
 async def parkent_under_construction(call: types.CallbackQuery, state: FSMContext):
     await bot.send_message(
         chat_id=call.message.chat.id,
@@ -117,7 +117,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 @dp.callback_query_handler(lambda c: c.data == "subsidya_ready", state=Form.PARKENT_READY)
-async def subsidya_ready_info(call: types.CallbackQuery):
+async def subsidya_ready_info(call: types.CallbackQuery, state: FSMContext):
     logging.info("subsidya_ready tugmasi bosildi")
     await call.answer()
 
@@ -130,7 +130,7 @@ async def subsidya_ready_info(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_ready", state=Form.PARKENT_READY)
-async def full_payment_ready_info(call: types.CallbackQuery):
+async def full_payment_ready_info(call: types.CallbackQuery, state: FSMContext):
     """100%лик тўлов асосида сотиб олиш tugmasi bosilganda ishlaydi."""
     await call.answer()
 
@@ -139,7 +139,7 @@ async def full_payment_ready_info(call: types.CallbackQuery):
     await call.message.edit_text(
         text=message_text,
         parse_mode="Markdown",
-        reply_markup=subsidya_ready_keyboard()
+        reply_markup=full_payment_keyboard()
     )
 
 async def update_photo(call, photo_path, caption_text, markup):
@@ -164,7 +164,7 @@ async def update_photo(call, photo_path, caption_text, markup):
             pass
 
 @dp.callback_query_handler(lambda c: c.data == "subsidya_2_rooms_ready", state=Form.PARKENT_READY)
-async def subsidya_2_rooms(call: types.CallbackQuery):
+async def subsidya_2_rooms(call: types.CallbackQuery, state: FSMContext):
     """2 хонали хонадон (Субсидия асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
 
@@ -197,7 +197,7 @@ async def subsidya_2_rooms(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == "subsidya_3_rooms_ready", state=Form.PARKENT_READY)
-async def subsidya_3_rooms(call: types.CallbackQuery):
+async def subsidya_3_rooms(call: types.CallbackQuery, state: FSMContext):
     """3 хонали хонадон (Субсидия асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
 
@@ -226,22 +226,22 @@ async def subsidya_3_rooms(call: types.CallbackQuery):
             pass
 
 
-@dp.callback_query_handler(lambda c: c.data == "full_payment_2_rooms_ready", state=Form.PARKENT_READY)
-async def full_payment_2_rooms(call: types.CallbackQuery):
-    """2 хонали хонадон (100% тўлов) rasmni yuborish yoki yangilash."""
-    await call.answer()
-    await update_photo(call, "images/2xona100.jpg", "🏠 *2 хонали хонадон*", full_payment_keyboard())
-
-
-@dp.callback_query_handler(lambda c: c.data == "full_payment_3_rooms_ready", state=Form.PARKENT_READY)
-async def full_payment_3_rooms(call: types.CallbackQuery):
-    """3 хонали хонадон (100% тўлов) rasmni yuborish yoki yangilash."""
-    await call.answer()
-    await update_photo(call, "images/3xona100.jpg", "🏠 *3 хонали хонадон*", full_payment_keyboard())
+# @dp.callback_query_handler(lambda c: c.data == "full_payment_2_rooms_ready", state=Form.PARKENT_READY)
+# async def full_payment_2_rooms(call: types.CallbackQuery, state: FSMContext):
+#     """2 хонали хонадон (100% тўлов) rasmni yuborish yoki yangilash."""
+#     await call.answer()
+#     await update_photo(call, "images/2xona100tayyor.jpg", "🏠 *2 хонали хонадон*", markup=full_payment_keyboard())
+#
+#
+# @dp.callback_query_handler(lambda c: c.data == "full_payment_3_rooms_ready", state=Form.PARKENT_READY)
+# async def full_payment_3_rooms(call: types.CallbackQuery, state: FSMContext):
+#     """3 хонали хонадон (100% тўлов) rasmni yuborish yoki yangilash."""
+#     await call.answer()
+#     await update_photo(call, "images/3xona100tayyor.jpg", "🏠 *3 хонали хонадон*", full_payment_keyboard())
 
 
 @dp.callback_query_handler(lambda c: c.data == "subsidya_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
-async def subsidya_under_construction(call: types.CallbackQuery):
+async def subsidya_under_construction(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_text(
         "*Бошлангич тўлов асосида сотиб олиш учун хонадонлар:*",
         parse_mode="Markdown",
@@ -250,7 +250,7 @@ async def subsidya_under_construction(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
-async def full_payment_under_construction(call: types.CallbackQuery):
+async def full_payment_under_construction(call: types.CallbackQuery, state:FSMContext):
     await call.message.edit_text(
         "*100% тўлов асосида сотиб олиш учун хонадонлар:*",
         parse_mode="Markdown",
@@ -259,21 +259,21 @@ async def full_payment_under_construction(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == "subsidya_2_rooms_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
-async def subsidya_2_rooms_under_construction(call: types.CallbackQuery):
+async def subsidya_2_rooms_under_construction(call: types.CallbackQuery, state: FSMContext):
     """2 хонали хонадон (бошлангич тўлов асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
     await update_photo(call, "images/2xonaboshlangich.jpg", "🏠 *2 хонали хонадон (бошлангич тўлов асосида)*", subsidya_under_construction_keyboard())
 
 
 @dp.callback_query_handler(lambda c: c.data == "subsidya_3_rooms_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
-async def subsidya_3_rooms_under_construction(call: types.CallbackQuery):
+async def subsidya_3_rooms_under_construction(call: types.CallbackQuery, state: FSMContext):
     """3 хонали хонадон (бошлангич тўлов асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
     await update_photo(call, "images/3xonaboshlangich.jpg", "🏠 *3 хонали хонадон (бошлангич тўлов асосида)*", subsidya_under_construction_keyboard())
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_2_rooms_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
-async def full_payment_2_rooms_under_construction(call: types.CallbackQuery):
+async def full_payment_2_rooms_under_construction(call: types.CallbackQuery, state: FSMContext):
     """2 хонали хонадон (100% тўлов асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
     await update_photo(call, "images/2xona100bitayotgan.jpg",
@@ -282,18 +282,18 @@ async def full_payment_2_rooms_under_construction(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_3_rooms_under_construction", state=Form.PARKENT_UNDER_CONSTRUCTION)
-async def full_payment_3_rooms_under_construction(call: types.CallbackQuery):
+async def full_payment_3_rooms_under_construction(call: types.CallbackQuery, state: FSMContext):
     """3 хонали хонадон (100% тўлов асосида) rasmni yuborish yoki yangilash."""
     await call.answer()
     await update_photo(call, "images/3xona100bitayotgan.jpg", "💰 *3 хонали хонадон (100% тўлов асосида)*", full_payment_under_construction_keyboard())
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_2_rooms_ready", state=Form.PARKENT_READY)
-async def full_payment_2_rooms(call: types.CallbackQuery):
+async def full_payment_2_rooms(call: types.CallbackQuery, state: FSMContext):
     """2 хонали хонадон (100% тўлов) rasmni yuborish."""
     await call.answer()
 
-    photo_path = "images/2xona100.jpg"
+    photo_path = "images/2xona100tayyor.jpg"
     caption_text = "🏠 *2 хонали хонадон*"
     markup = full_payment_keyboard()
 
@@ -318,12 +318,12 @@ async def full_payment_2_rooms(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(lambda c: c.data == "full_payment_3_rooms_ready", state=Form.PARKENT_READY)
-async def full_payment_3_rooms(call: types.CallbackQuery):
+async def full_payment_3_rooms(call: types.CallbackQuery, state: FSMContext):
     """3 хонали хонадон (100% тўлов) rasmni yuborish."""
     await call.answer()
 
 
-    photo_path = "images/3xona100.jpg"
+    photo_path = "images/3xona100tayyor.jpg"
     caption_text = "🏠 *3 хонали хонадон*"
     markup = full_payment_keyboard()
 

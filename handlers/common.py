@@ -4,14 +4,10 @@ from loader import dp, bot
 from keyboards.inline.inline import start_keyboard
 from states.states import Form
 import logging
-
-# @dp.callback_query_handler(lambda c: c.data == "main_menu", state="*")
-# async def main_menu(call: types.CallbackQuery, state: FSMContext):
-#     """Ortga qaytish tugmasi bosilganda bosh menyuga o'tish."""
-#     await call.message.edit_text("Ассалому алайкум!\nУшбу бот орқали сизга Тошкент "
-#         "вилоятининг Паркент туманидаги турар жой мажмуалари "
-#         "тўғрисида маълумот берилади.", reply_markup=start_keyboard())
-#     await Form.MAIN.set()
+from keyboards.inline.inline import (
+    parkent_main_keyboard, parkent_ready_keyboard, parkent_under_construction_keyboard,
+    lakeside_main_keyboard, lakeside_purchase_options, full_payment_options, discount_payment_options, credit_payment_options
+)
 
 @dp.callback_query_handler(lambda c: c.data == "main_menu", state="*")
 async def back_to_main_menu(call: types.CallbackQuery, state: FSMContext):
@@ -27,33 +23,14 @@ async def back_to_main_menu(call: types.CallbackQuery, state: FSMContext):
         except Exception as e:
             logging.error(f"Xabarni o‘chirishda xatolik: {e}")
 
-    await state.update_data(gallery_messages=[])  # Saqlangan xabarlarni tozalash
+    await state.update_data(gallery_messages=[])
 
-    # Bosh menyu xabarini yuborish
     await bot.send_message(
         chat_id=call.message.chat.id,
         text="*Ушбу бот орқали сизга Тошкент "
         "вилоятининг Паркент туманидаги турар жой мажмуалари "
         "тўғрисида маълумот берилади.*",
         parse_mode="Markdown",
-        reply_markup=start_keyboard())
+        reply_markup=start_keyboard()
+    )
 
-
-# @dp.callback_query_handler(lambda c: c.data == 'back', state="*")
-# async def go_back(call: types.CallbackQuery, state: FSMContext):
-#     """Bitta oldingi state'ga qaytish."""
-#     data = await state.get_data()
-#     last_state = data.get("last_state")  # Oxirgi saqlangan state
-#
-#     if last_state:
-#         await state.set_state(last_state)  # Oldingi state'ga qaytish
-#         await call.answer("🔙 Orqaga qaytdingiz.")  # Foydalanuvchiga xabar yuborish
-#     else:
-#         await call.answer("⏪ Ortga qaytib bo‘lmaydi.")  # Agar oldingi state bo‘lmasa
-#
-#
-# async def save_last_state(state: FSMContext):
-#     """State o‘zgarganda oldingi state'ni saqlab borish."""
-#     current_state = await state.get_state()
-#     if current_state:
-#         await state.update_data(last_state=current_state)

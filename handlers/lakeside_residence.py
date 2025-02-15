@@ -10,8 +10,6 @@ from keyboards.inline.inline import (
 )
 from states.states import Form
 from aiogram.types import InputFile
-
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -37,10 +35,10 @@ async def lakeside_residence_buy(call: types.CallbackQuery, state: FSMContext):
         parse_mode="Markdown",
         reply_markup=lakeside_purchase_options()
     )
-    await Form.LAKESIDE_READY.set()
+    # await Form.LAKESIDE_READY.set()
 
 
-@dp.callback_query_handler(lambda c: c.data == "full_payment_lakeside", state=Form.LAKESIDE_READY)
+@dp.callback_query_handler(lambda c: c.data == "full_payment_lakeside", state="*")
 async def lakeside_residence_full_payment(call: types.CallbackQuery, state: FSMContext):
     """100% to'lov asosida sotib olish."""
     await call.message.edit_text(
@@ -48,10 +46,10 @@ async def lakeside_residence_full_payment(call: types.CallbackQuery, state: FSMC
         parse_mode="Markdown",
         reply_markup=full_payment_options()
     )
-    await Form.LAKESIDE_100PERSENT.set()
+    # await Form.LAKESIDE_100PERSENT.set()
 
 
-@dp.callback_query_handler(lambda c: c.data == "discount_payment_lakeside", state=Form.LAKESIDE_READY)
+@dp.callback_query_handler(lambda c: c.data == "discount_payment_lakeside", state="*")
 async def lakeside_residence_discount(call: types.CallbackQuery, state: FSMContext):
     """5% chegirma asosida sotib olish."""
     await call.message.edit_text(
@@ -59,10 +57,10 @@ async def lakeside_residence_discount(call: types.CallbackQuery, state: FSMConte
         parse_mode="Markdown",
         reply_markup=discount_payment_options()
     )
-    await Form.LAKESIDE_5PERSENT.set()
+    # await Form.LAKESIDE_5PERSENT.set()
 
 
-@dp.callback_query_handler(lambda c: c.data == "credit_payment_lakeside", state=Form.LAKESIDE_READY)
+@dp.callback_query_handler(lambda c: c.data == "credit_payment_lakeside", state="*")
 async def lakeside_residence_credit(call: types.CallbackQuery, state: FSMContext):
     """Kredit asosida sotib olish."""
     await call.message.edit_text(
@@ -70,7 +68,7 @@ async def lakeside_residence_credit(call: types.CallbackQuery, state: FSMContext
         parse_mode="Markdown",
         reply_markup=credit_payment_options()
     )
-    await Form.LAKESIDE_CREDIT.set()
+    # await Form.LAKESIDE_CREDIT.set()
 
 
 @dp.callback_query_handler(lambda c: c.data == "lakeside_residence_gallery", state=Form.LAKESIDE_MAIN)
