@@ -27,10 +27,15 @@ async def lakeside_residence_main(call: types.CallbackQuery, state: FSMContext):
     await Form.LAKESIDE_MAIN.set()
 
 
-@dp.callback_query_handler(lambda c: c.data == "lakeside_residence_under_construction", state=Form.LAKESIDE_MAIN)
+@dp.callback_query_handler(lambda c: c.data == "lakeside_residence_under_construction", state='*')
 async def lakeside_residence_buy(call: types.CallbackQuery, state: FSMContext):
     """Sotib olish uchun menyu."""
-    await call.message.edit_text(
+    try:
+        await call.message.delete()  # Eski xabarni o‘chirish
+    except Exception as e:
+        print(f"Xabarni o‘chirishda xatolik: {e}")
+
+    await call.message.answer(
         text="*Сотиб олиш учун:*",
         parse_mode="Markdown",
         reply_markup=lakeside_purchase_options()
@@ -162,7 +167,7 @@ data = {
 }
 
 IMAGE_NOT_FOUND_MSG = "❌ Tanlangan rasm mavjud emas: {}"
-IMAGE_SEND_ERROR_MSG = "Siz allaqachon shu rasmni ko'rmoqdasiz"
+IMAGE_SEND_ERROR_MSG = "Сиз аллақачон шу расмни кўрмоқдасиз"
 NO_IMAGE_FOUND_MSG = "❌ Ushbu tanlov uchun rasm topilmadi."
 
 @dp.callback_query_handler(lambda c: c.data in data, state="*")

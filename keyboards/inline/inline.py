@@ -108,7 +108,7 @@ def create_payment_options(prefix: str) -> InlineKeyboardMarkup:
         callback_data = f"{prefix}_{size.replace('.', '_')}"
         keyboard.add(InlineKeyboardButton(f"🏗 {size} m² - {rooms}", callback_data=callback_data))
 
-    keyboard.add(InlineKeyboardButton("⬅️ Орқага", callback_data="lakeside_residence"))
+    keyboard.add(InlineKeyboardButton("⬅️ Орқага", callback_data="lakeside_residence_under_construction"))
     keyboard.add(InlineKeyboardButton("🏠 Бош сахифа", callback_data="main_menu"))
     return keyboard
 
